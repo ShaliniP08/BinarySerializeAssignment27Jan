@@ -6,13 +6,16 @@ using System.Runtime.Serialization;
 namespace BinarySerializeAssignment27Jan
 {
     [Serializable] //attribute
-    class Age : IDeserializationCallback //interface
+    public class Age : IDeserializationCallback //interface
     {
         DateTime birthDate;
         DateTime todayDate;
         [NonSerialized] //attribute only for fields
-        public TimeSpan AgeDiff;
-
+        public int years;
+        [NonSerialized]
+        public int months;
+        [NonSerialized]
+        public int days;
         public Age()
         {
 
@@ -29,11 +32,9 @@ namespace BinarySerializeAssignment27Jan
             TimeSpan AgeDiff = todayDate - birthDate;
             DateTime age = DateTime.MinValue + AgeDiff;
 
-            int years = AgeDiff.Days / 365;
-            int months = age.Month - 1;
-            int days = todayDate.Day - birthDate.Day;
-
-            Console.Write($"\nYour age is {years} years, {months} months, {days} days");
+            years = AgeDiff.Days / 365;
+            months = age.Month - 1;
+            days = todayDate.Day - birthDate.Day;
         }
     }
     class Program
@@ -53,6 +54,7 @@ namespace BinarySerializeAssignment27Jan
                 fs.Seek(0, SeekOrigin.Begin);
 
                 Age de = (Age)bf.Deserialize(fs);
+                Console.Write($"\nYour age is {de.years} years, {de.months} months and {de.days} days");
             }
             catch (Exception e)
             {
